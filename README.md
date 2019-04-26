@@ -1,4 +1,4 @@
-# idam-importer
+# idam-docker-base
 
 Docker image with some IDAM helper scripts baked in. To be used as a base for custom IDAM images. Motivation for this repo driven from requirement to setup local dev environments using new IDAM Docker images.
 
