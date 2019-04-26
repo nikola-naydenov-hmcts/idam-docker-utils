@@ -18,7 +18,7 @@ More info on ACR tasks can be read here: https://docs.microsoft.com/en-us/azure/
 Example Dockerfile built on top of this base:
 
 ```
-FROM idam-docker-base
+FROM hmcts.azurecr.io/hmctspublic/idam-base
 
 COPY scripts /scripts
 
