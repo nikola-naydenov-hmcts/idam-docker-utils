@@ -1,0 +1,3 @@
+#!/bin/sh
+
+echo -e "\nPLEASE OVERRIDE THIS FILE IN A CUSTOM DOCKER IMAGE"
