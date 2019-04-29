@@ -3,13 +3,13 @@ steps:
 
   - id: build
     build: >
-      -t {{.Run.Registry}}/hmctspublic/idam-base:latest -t {{.Run.Registry}}/hmctspublic/idam-base:{{.Run.ID}}
+      -t {{.Run.Registry}}/hmcts/idam/utils:latest -t {{.Run.Registry}}/hmcts/idam/utils:{{.Run.ID}}
       .
     keep: true
 
   - id: push
     push:
-      - "{{.Run.Registry}}/hmctspublic/idam-base:{{.Run.ID}}"
-      - "{{.Run.Registry}}/hmctspublic/idam-base:latest"
+      - "{{.Run.Registry}}/hmcts/idam/utils:{{.Run.ID}}"
+      - "{{.Run.Registry}}/hmcts/idam/utils:latest"
     when:
       - build
