@@ -2,31 +2,19 @@
 
 set -e
 
-ENV="${1:-local}"
-LABEL="${2:-citizen}"
-SELF_REG="${3:-true}"
-CLIENT_ID="${4:-cmc_citizen}"
-CLIENT_SECRET="${5:-12345678}"
-REDIRECT_URLS="${6:-'["https://localhost:3000/receiver"]'}"
-ALLOWED_ROLES="${7:-'["citizen"]'}"
+LABEL="${1:-citizen}"
+SELF_REG="${2:-true}"
+CLIENT_ID="${3:-cmc_citizen}"
+CLIENT_SECRET="${4:-12345678}"
+REDIRECT_URLS="${5:-'["https://localhost:3000/receiver"]'}"
+ALLOWED_ROLES="${6:-'["citizen"]'}"
 
-case ${ENV} in
-  local)
-    IDAM_URI="http://idam-api:5000"
-    IDAM_USER="idamowner%40hmcts.net"
-    IDAM_PW="Ref0rmIsFun"
-  ;;
-  *)
-    echo ${ENV_MESSAGE}
-    exit 1 ;;
-esac
-
-apiToken=$(sh /scripts/authenticate.sh "${IDAM_URI}" "${IDAM_USER}" "${IDAM_PW}")
+apiToken=$(sh /scripts/authenticate.sh "${IDAM_API_URL}" "${IDAM_ADMIN_USER}" "${IDAM_ADMIN_PASSWORD}")
 
 echo -e "\nCreating service with:\nLabel: ${LABEL}\nClient ID: ${CLIENT_ID}\nClient Secret: ${CLIENT_SECRET}\nRedirect URL: ${REDIRECT_URLS}\nRoles: ${ALLOWED_ROLES}"
 
-curl --silent --show-error -H 'Content-Type: application/json' -H "Authorization: AdminApiAuthToken ${apiToken}" \
-  ${IDAM_URI}/services -d '{
+STATUS=$(curl -s -o /dev/null -w '%{http_code}' -H 'Content-Type: application/json' -H "Authorization: AdminApiAuthToken ${apiToken}" \
+  ${IDAM_API_URL}/services -d '{
   "description": "Money Claims - '${LABEL}'",
   "label": "Money Claims - '${LABEL}'",
   "oauth2ClientId": "'${CLIENT_ID}'",
@@ -38,4 +26,12 @@ curl --silent --show-error -H 'Content-Type: application/json' -H "Authorization
   "onboardingEndpoint": "",
   "onboardingRoles": [ ],
   "selfRegistrationAllowed": '${SELF_REG}'
-}'
+}')
+
+if [ $STATUS -eq 201 ]; then
+  echo "Service created sucessfully"
+elif [ $STATUS -eq 409 ]; then
+  echo "Service already exists!"
+else
+  echo "ERROR: HTTPCODE = $STATUS"
+fi

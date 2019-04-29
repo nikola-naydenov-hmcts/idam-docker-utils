@@ -2,29 +2,25 @@
 
 set -e
 
-ENV="${1:-local}"
-ID="${2:-citizen}"
+ID="${1:-citizen}"
 
-case ${ENV} in
-  local)
-    IDAM_URI="http://idam-api:5000"
-    IDAM_USER="idamowner%40hmcts.net"
-    IDAM_PW="Ref0rmIsFun"
-  ;;
-  *)
-    echo ${ENV_MESSAGE}
-    exit 1 ;;
-esac
-
-apiToken=$(sh /scripts/authenticate.sh "${IDAM_URI}" "${IDAM_USER}" "${IDAM_PW}")
+apiToken=$(sh /scripts/authenticate.sh "${IDAM_API_URL}" "${IDAM_ADMIN_USER}" "${IDAM_ADMIN_PASSWORD}")
 
 echo -e "\nCreating role with:\nID: ${ID}"
 
-curl --silent --show-error -H 'Content-Type: application/json' -H "Authorization: AdminApiAuthToken ${apiToken}" \
-  ${IDAM_URI}/roles -d '{
+STATUS=$(curl -s -o /dev/null -w '%{http_code}' -H 'Content-Type: application/json' -H "Authorization: AdminApiAuthToken ${apiToken}" \
+  ${IDAM_API_URL}/roles -d '{
   "id": "'${ID}'",
   "name": "'${ID}'",
   "description": "'${ID}'",
   "assignableRoles": [ ],
   "conflictingRoles": [ ]
-}'
+}')
+
+if [ $STATUS -eq 201 ]; then
+  echo "Role created sucessfully"
+elif [ $STATUS -eq 409 ]; then
+  echo "Role already exists!"
+else
+  echo "ERROR: HTTPCODE = $STATUS"
+fi
