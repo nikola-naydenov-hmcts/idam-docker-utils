@@ -15,8 +15,8 @@ echo -e "\nCreating service with:\nLabel: ${LABEL}\nClient ID: ${CLIENT_ID}\nCli
 
 STATUS=$(curl -s -o /dev/null -w '%{http_code}' -H 'Content-Type: application/json' -H "Authorization: AdminApiAuthToken ${apiToken}" \
   ${IDAM_API_URL}/services -d '{
-  "description": "Money Claims - '${LABEL}'",
-  "label": "Money Claims - '${LABEL}'",
+  "description": "'${LABEL}'",
+  "label": "'${LABEL}'",
   "oauth2ClientId": "'${CLIENT_ID}'",
   "oauth2ClientSecret": "'${CLIENT_SECRET}'",
   "oauth2Scope": "openid profile authorities acr roles",
