@@ -23,4 +23,5 @@ elif [ $STATUS -eq 409 ]; then
   echo "Role already exists!"
 else
   echo "ERROR: HTTPCODE = $STATUS"
+  exit 1
 fi

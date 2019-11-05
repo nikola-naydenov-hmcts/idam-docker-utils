@@ -31,4 +31,5 @@ elif [ $STATUS -eq 409 ]; then
   echo "User already exists!"
 else
   echo "ERROR: HTTPCODE = $STATUS"
+  exit 1
 fi

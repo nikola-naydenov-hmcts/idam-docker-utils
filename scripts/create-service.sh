@@ -34,4 +34,5 @@ elif [ $STATUS -eq 409 ]; then
   echo "Service already exists!"
 else
   echo "ERROR: HTTPCODE = $STATUS"
+  exit 1
 fi

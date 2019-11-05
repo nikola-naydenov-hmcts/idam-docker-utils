@@ -20,4 +20,5 @@ if [ $STATUS -eq 204 ]; then
   echo "Service patched sucessfully"
 else
   echo "ERROR: HTTPCODE = $STATUS"
+  exit 1
 fi
